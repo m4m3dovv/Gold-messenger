@@ -6,7 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { validateInitData } from './telegramAuth.js';
-import { startBot, getBotWebhookHandler } from './bot.js';
+import { startBot } from './bot.js';
 import {
   pool,
   initSchema,
@@ -187,17 +187,6 @@ app.get('/api/messages/:peerId', async (req, res) => {
 });
 
 // ---------------------------------------------------------------------
-// Telegram Webhook endpoint - express.json middleware-dən kənar işləməlidir
-app.post('/telegram-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  const handler = getBotWebhookHandler();
-  if (!handler) return res.sendStatus(200);
-  // Body-ni JSON-a çevir ki grammY oxuya bilsin
-  if (Buffer.isBuffer(req.body)) {
-    req.body = JSON.parse(req.body.toString());
-  }
-  return handler(req, res);
-});
-
 // Static files (Mini App)
 // ---------------------------------------------------------------------
 app.use(express.static(path.join(__dirname, '..', 'webapp')));
@@ -252,15 +241,6 @@ wss.on('connection', async (ws, req) => {
 // Startup
 // ---------------------------------------------------------------------
 async function main() {
-  if (!process.env.DATABASE_URL) {
-    console.error('[startup] fatal: DATABASE_URL environment variable is not set!');
-    console.error('[startup] Railway-də PostgreSQL servisi əlavə edin və DATABASE_URL dəyişənini təyin edin.');
-    process.exit(1);
-  }
-  if (!BOT_TOKEN) {
-    console.error('[startup] fatal: BOT_TOKEN environment variable is not set!');
-    process.exit(1);
-  }
   await initSchema();
   console.log('[db] schema ready');
 
