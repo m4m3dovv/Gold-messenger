@@ -1,0 +1,361 @@
+/* =====================================================================
+   MÜHÜR — design tokens
+   Palette: near-black ledger background, antique-gold accent, warm
+   off-white ink. Sharp-ish corners (vault/ledger feel, not bubble-app
+   pill shapes). Monospace "ID chips" are the signature recurring motif —
+   every identity in this app is a number, never a phone/email.
+   ===================================================================== */
+:root {
+  --bg:        #0E0F12;
+  --surface:   #17191E;
+  --surface-2: #1E2127;
+  --border:    #2A2D34;
+
+  --gold:        #C9A227;
+  --gold-bright: #E8C766;
+  --gold-dim:    #8A7320;
+
+  --text:      #EDEAE3;
+  --text-dim:  #8B8D93;
+  --text-faint:#5C5F66;
+
+  --danger: #C75450;
+  --online: #5FAE7D;
+
+  --radius: 6px;
+  --radius-sm: 4px;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Space Grotesk', 'SF Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ===================== Layout primitives ===================== */
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.screen.hidden { display: none; }
+
+.screen--center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 24px;
+  gap: 14px;
+}
+
+.muted { color: var(--text-dim); font-size: 14px; line-height: 1.5; margin: 0; }
+.center-text { text-align: center; }
+
+/* ===================== Seal emblem ===================== */
+.seal { width: 84px; height: 84px; margin-bottom: 4px; }
+.seal__svg { width: 100%; height: 100%; }
+.seal__ring {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 3;
+}
+.seal__hole-top, .seal__hole-stem {
+  stroke: var(--gold);
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.seal__hole-top { fill: var(--gold); stroke: none; }
+
+.seal--pulse .seal__ring,
+.seal--pulse .seal__hole-top,
+.seal--pulse .seal__hole-stem {
+  animation: seal-pulse 1.8s ease-in-out infinite;
+}
+@keyframes seal-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .seal--pulse .seal__ring,
+  .seal--pulse .seal__hole-top,
+  .seal--pulse .seal__hole-stem { animation: none; opacity: 1; }
+}
+
+/* ===================== Brand ===================== */
+.brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-size: 22px;
+  margin: 0;
+  color: var(--text);
+}
+.brand--sm { font-size: 16px; letter-spacing: 0.14em; }
+
+/* ===================== Forms / fields ===================== */
+.form {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+.field__label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+input[type="text"] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+input[type="text"]::placeholder { color: var(--text-faint); }
+input[type="text"]:focus {
+  border-color: var(--gold);
+}
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: filter 0.15s ease, background 0.15s ease;
+}
+.btn:active { filter: brightness(0.92); }
+
+.btn--primary {
+  background: var(--gold);
+  color: #161300;
+}
+.btn--primary:hover { background: var(--gold-bright); }
+
+.btn--gold-outline {
+  background: transparent;
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+.btn--gold-outline:hover { border-color: var(--gold); }
+
+.footnote {
+  font-size: 11px;
+  color: var(--text-faint);
+  line-height: 1.6;
+  margin-top: 8px;
+  max-width: 280px;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 13px;
+  margin: 0;
+}
+.hidden { display: none !important; }
+
+/* ===================== Top bar ===================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.topbar__brand { display: flex; align-items: center; gap: 8px; }
+.topbar__title { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.topbar__name { font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--text);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* ===================== ID chip — the recurring identity motif ===================== */
+.id-chip {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.10);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.id-chip--sm { font-size: 11px; padding: 2px 6px; align-self: flex-start; }
+
+/* ===================== New chat ===================== */
+.new-chat {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+}
+.new-chat input { flex: 1; }
+#new-chat-error { padding: 0 16px 8px; }
+
+/* ===================== Conversation list ===================== */
+.conv-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.conv-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.conv-row:hover, .conv-row:active { background: var(--surface); }
+.conv-row__main { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.conv-row__name { font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+.conv-row__preview {
+  font-size: 13px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.conv-row__time { font-size: 12px; color: var(--text-faint); white-space: nowrap; }
+
+#conv-empty { padding: 40px 24px; }
+
+/* ===================== Message list & bubbles ===================== */
+.message-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bubble {
+  max-width: 78%;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  font-size: 14.5px;
+  line-height: 1.45;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  position: relative;
+}
+.bubble__time {
+  display: block;
+  font-size: 10.5px;
+  margin-top: 4px;
+  opacity: 0.6;
+  font-family: var(--font-mono);
+}
+
+.bubble--in {
+  align-self: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-bottom-left-radius: 2px;
+}
+.bubble--out {
+  align-self: flex-end;
+  background: var(--gold);
+  color: #1A1500;
+  border-bottom-right-radius: 2px;
+}
+.bubble--out .bubble__time { color: #1A1500; }
+
+.bubble img, .bubble video {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+.bubble audio { width: 220px; }
+
+.bubble--system {
+  align-self: center;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 12px;
+  border: none;
+}
+
+/* ===================== Send bar ===================== */
+.send-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.send-bar input[type="text"] {
+  flex: 1;
+}
+.attach-btn, .send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--gold);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.send-btn { border: none; background: var(--gold); color: #161300; }
+
+.status {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 6px 0 10px;
+  margin: 0;
+}
