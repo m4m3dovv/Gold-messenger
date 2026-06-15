@@ -6,7 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { validateInitData } from './telegramAuth.js';
-import { startBot } from './bot.js';
+import { startBot, getBotWebhookHandler } from './bot.js';
 import {
   pool,
   initSchema,
@@ -187,6 +187,13 @@ app.get('/api/messages/:peerId', async (req, res) => {
 });
 
 // ---------------------------------------------------------------------
+// Telegram Webhook endpoint
+app.post('/telegram-webhook', async (req, res) => {
+  const handler = getBotWebhookHandler();
+  if (!handler) return res.sendStatus(200);
+  return handler(req, res);
+});
+
 // Static files (Mini App)
 // ---------------------------------------------------------------------
 app.use(express.static(path.join(__dirname, '..', 'webapp')));
