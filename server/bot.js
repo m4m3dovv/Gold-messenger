@@ -1,10 +1,9 @@
 /**
- * Telegram bot — webhook rejimində işləyir (Railway üçün optimal).
- * Polling əvəzinə webhook istifadə edir ki, çoxlu instansiya konflikti olmasın.
+ * Telegram bot — minimal: /start sends a "web_app" button that opens the
+ * Mini App. All real logic (registration, chat, encryption) lives in the
+ * Mini App itself, not in bot chat commands.
  */
-import { Bot, webhookCallback } from 'grammy';
-
-let botInstance = null;
+import { Bot } from 'grammy';
 
 export async function startBot(token, miniAppUrl) {
   if (!token) {
@@ -16,7 +15,6 @@ export async function startBot(token, miniAppUrl) {
   }
 
   const bot = new Bot(token);
-  botInstance = bot;
 
   bot.command('start', async (ctx) => {
     await ctx.reply(
@@ -33,34 +31,19 @@ export async function startBot(token, miniAppUrl) {
     console.error('[bot] error:', err?.message || err);
   });
 
-  // Menu düyməsini set et
+  // Persistent "menu button" (next to the message input, always visible) —
+  // gives users one-tap access to the Mini App without needing /start.
   if (miniAppUrl) {
     try {
       await bot.api.setChatMenuButton({
         menu_button: { type: 'web_app', text: 'Aç', web_app: { url: miniAppUrl } },
       });
-      console.log('[bot] Menu düyməsi quruldu.');
     } catch (e) {
       console.warn('[bot] setChatMenuButton alınmadı:', e?.message || e);
     }
   }
 
-  // Webhook qur
-  if (miniAppUrl) {
-    const webhookUrl = `${miniAppUrl}/telegram-webhook`;
-    try {
-      await bot.api.setWebhook(webhookUrl, { drop_pending_updates: true });
-      console.log(`[bot] Webhook quruldu: ${webhookUrl}`);
-    } catch (e) {
-      console.error('[bot] Webhook qurmaq alınmadı:', e?.message || e);
-    }
-  }
-
-  console.log('[bot] Telegram bot webhook rejimində hazırdır.');
+  bot.start();
+  console.log('[bot] Telegram bot polling rejimində başladı.');
   return bot;
-}
-
-export function getBotWebhookHandler() {
-  if (!botInstance) return null;
-  return webhookCallback(botInstance, 'express');
 }
