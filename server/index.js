@@ -187,10 +187,14 @@ app.get('/api/messages/:peerId', async (req, res) => {
 });
 
 // ---------------------------------------------------------------------
-// Telegram Webhook endpoint
-app.post('/telegram-webhook', async (req, res) => {
+// Telegram Webhook endpoint - express.json middleware-dən kənar işləməlidir
+app.post('/telegram-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const handler = getBotWebhookHandler();
   if (!handler) return res.sendStatus(200);
+  // Body-ni JSON-a çevir ki grammY oxuya bilsin
+  if (Buffer.isBuffer(req.body)) {
+    req.body = JSON.parse(req.body.toString());
+  }
   return handler(req, res);
 });
 
