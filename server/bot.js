@@ -16,16 +16,24 @@ export async function startBot(token, miniAppUrl) {
 
   const bot = new Bot(token);
 
-  bot.command('start', async (ctx) => {
+  const sendOpenButton = async (ctx) => {
+    if (!miniAppUrl) {
+      await ctx.reply('Mini App linki hələ serverdə qurulmayıb. Admin MINIAPP_URL dəyişənini əlavə etməlidir.');
+      return;
+    }
+
     await ctx.reply(
       'Salam! 🔐\n\nBu, ucdan-uca şifrələnmiş söhbət sistemidir. Aşağıdakı düyməyə bas, profilini yarat və danış.',
       {
         reply_markup: {
-          inline_keyboard: [[{ text: '🔐 Aç', web_app: { url: miniAppUrl || 'https://example.com' } }]],
+          inline_keyboard: [[{ text: '🔐 Aç', web_app: { url: miniAppUrl } }]],
         },
       }
     );
-  });
+  };
+
+  bot.command('start', sendOpenButton);
+  bot.on('message', sendOpenButton);
 
   bot.catch((err) => {
     console.error('[bot] error:', err?.message || err);
