@@ -219,7 +219,7 @@ newChatBtn.addEventListener('click', async () => {
 
   const { status, body } = await api('/api/users/' + encodeURIComponent(uname));
   if (status === 404) {
-    newChatError.textContent = 'Bu adda istifadəçi tapılmadı.';
+    newChatError.textContent = 'Bu ad və ya ID ilə istifadəçi tapılmadı.';
     newChatError.classList.remove('hidden');
     return;
   }

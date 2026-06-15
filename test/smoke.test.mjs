@@ -78,7 +78,9 @@ global.fetch = async (urlOrPath, opts) => {
     return json(200, { id: 42, username: body.username, publicKey: myPublicKeyB64 });
   }
   if (path === '/api/conversations') return json(200, { conversations: [] });
-  if (path === '/api/users/bob') return json(200, { id: 99, username: 'bob', publicKey: b64(bob.publicKey) });
+  if (path === '/api/users/bob' || path === '/api/users/%23000099') {
+    return json(200, { id: 99, username: 'bob', publicKey: b64(bob.publicKey) });
+  }
 
   if (path === '/api/messages/99') {
     const myPub = unb64(myPublicKeyB64);
@@ -127,7 +129,7 @@ if (scenario === 'chat') {
   console.log('  after register -> chats visible:', !isHidden('screen-chats'));
   console.log('  my public key captured:', !!myPublicKeyB64);
 
-  window.document.getElementById('new-chat-username').value = 'bob';
+  window.document.getElementById('new-chat-username').value = '#000099';
   window.document.getElementById('new-chat-btn').click();
   await sleep(100);
   console.log('  after open chat -> chat screen visible:', !isHidden('screen-chat'));

@@ -53,6 +53,15 @@ function isValidPublicKeyB64(s) {
   }
 }
 
+function parseLookupId(value) {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().replace(/^#/, '');
+  if (!/^\d{1,6}$/.test(normalized)) return null;
+
+  const id = Number(normalized);
+  return Number.isInteger(id) && id > 0 ? id : null;
+}
+
 // ---------------------------------------------------------------------
 // Routes
 // ---------------------------------------------------------------------
@@ -94,14 +103,18 @@ app.get('/api/me', async (req, res) => {
   res.json({ registered: true, id: user.id, username: user.username, publicKey: user.public_key });
 });
 
-// Look up another user by username (to start a chat) — returns their
-// public key so the client can derive the shared secret.
-app.get('/api/users/:username', async (req, res) => {
+// Look up another user by app id (#000002) or username (to start a chat)
+// and return their public key so the client can derive the shared secret.
+app.get('/api/users/:lookup', async (req, res) => {
   const { error, user: me } = await authenticate(req.query.initData);
   if (error) return res.status(401).json({ error });
   if (!me) return res.status(403).json({ error: 'not_registered' });
 
-  const target = await findUserByUsername(req.params.username.trim());
+  const lookup = req.params.lookup.trim();
+  const lookupId = parseLookupId(lookup);
+  const target = lookupId
+    ? await findUserById(lookupId)
+    : await findUserByUsername(lookup);
   if (!target) return res.status(404).json({ error: 'not_found' });
   res.json({ id: target.id, username: target.username, publicKey: target.public_key });
 });

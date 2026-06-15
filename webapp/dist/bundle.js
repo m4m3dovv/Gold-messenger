@@ -4584,7 +4584,7 @@ newChatBtn.addEventListener("click", async () => {
   if (!uname) return;
   const { status, body } = await api("/api/users/" + encodeURIComponent(uname));
   if (status === 404) {
-    newChatError.textContent = "Bu adda istifad\u0259\xE7i tap\u0131lmad\u0131.";
+    newChatError.textContent = "Bu ad v\u0259 ya ID il\u0259 istifad\u0259\xE7i tap\u0131lmad\u0131.";
     newChatError.classList.remove("hidden");
     return;
   }
