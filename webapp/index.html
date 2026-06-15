@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Mühür — şifrəli söhbət</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+  <!-- ===================== SPLASH / LOADING ===================== -->
+  <section id="screen-loading" class="screen screen--center">
+    <div class="seal seal--pulse">
+      <svg viewBox="0 0 100 100" class="seal__svg" aria-hidden="true">
+        <polygon points="50,4 93,27 93,73 50,96 7,73 7,27" class="seal__ring"/>
+        <circle cx="50" cy="46" r="14" class="seal__hole-top"/>
+        <path d="M50 56 L50 78 M40 78 L60 78" class="seal__hole-stem"/>
+      </svg>
+    </div>
+    <p class="muted">Yüklənir…</p>
+  </section>
+
+  <!-- ===================== REGISTRATION ===================== -->
+  <section id="screen-register" class="screen screen--center hidden">
+    <div class="seal">
+      <svg viewBox="0 0 100 100" class="seal__svg" aria-hidden="true">
+        <polygon points="50,4 93,27 93,73 50,96 7,73 7,27" class="seal__ring"/>
+        <circle cx="50" cy="46" r="14" class="seal__hole-top"/>
+        <path d="M50 56 L50 78 M40 78 L60 78" class="seal__hole-stem"/>
+      </svg>
+    </div>
+    <h1 class="brand">MÜHÜR</h1>
+    <p class="muted center-text">Ucdan-uca şifrəli söhbət.<br/>Telefon nömrəsi, e-poçt — heç biri lazım deyil.</p>
+
+    <form id="register-form" class="form">
+      <label class="field">
+        <span class="field__label">Adını seç</span>
+        <input id="register-name" type="text" placeholder="məs. Elvin" maxlength="24" autocomplete="off" required />
+      </label>
+      <button type="submit" class="btn btn--primary">Açar yarat və davam et</button>
+      <p id="register-error" class="error hidden"></p>
+    </form>
+
+    <p class="footnote">Davam etdikdə bu cihazda şəxsi şifrələmə açarın yaradılır.<br/>Bu açar serverə HEÇ VAXT göndərilmir.</p>
+  </section>
+
+  <!-- ===================== CHAT LIST ===================== -->
+  <section id="screen-chats" class="screen hidden">
+    <header class="topbar">
+      <div class="topbar__brand">
+        <span class="brand brand--sm">MÜHÜR</span>
+      </div>
+      <div class="id-chip" id="my-id-chip">#000000</div>
+    </header>
+
+    <div class="new-chat">
+      <input id="new-chat-username" type="text" placeholder="İstifadəçi adı ilə axtar…" autocomplete="off" />
+      <button id="new-chat-btn" class="btn btn--gold-outline">Başla</button>
+    </div>
+    <p id="new-chat-error" class="error hidden"></p>
+
+    <div id="conversation-list" class="conv-list">
+      <!-- conversation rows injected here -->
+    </div>
+    <p id="conv-empty" class="muted center-text hidden">Hələ söhbətin yoxdur.<br/>Yuxarıdan istifadəçi adı ilə axtar.</p>
+  </section>
+
+  <!-- ===================== CHAT VIEW ===================== -->
+  <section id="screen-chat" class="screen hidden">
+    <header class="topbar">
+      <button id="chat-back" class="icon-btn" aria-label="Geri">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="topbar__title">
+        <div id="chat-peer-name" class="topbar__name">—</div>
+        <div id="chat-peer-id" class="id-chip id-chip--sm">#000000</div>
+      </div>
+    </header>
+
+    <div id="message-list" class="message-list"></div>
+
+    <form id="send-form" class="send-bar">
+      <label class="attach-btn" title="Şəkil / video / səs">
+        <input id="file-input" type="file" accept="image/*,video/*,audio/*" hidden />
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M21 12.5V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7.5M16 11l-4.5 4.5L9 13l-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </label>
+      <input id="message-input" type="text" placeholder="Mesaj yaz…" autocomplete="off" />
+      <button type="submit" class="send-btn" aria-label="Göndər">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 11l18-7-7 18-2-8-9-3z" fill="currentColor"/></svg>
+      </button>
+    </form>
+    <p id="chat-status" class="status hidden"></p>
+  </section>
+
+  <script type="module" src="dist/bundle.js"></script>
+</body>
+</html>

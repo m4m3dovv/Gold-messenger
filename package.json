@@ -1,0 +1,28 @@
+{
+  "name": "gold-messenger",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node build.mjs",
+    "postinstall": "node build.mjs",
+    "start": "node server/index.js",
+    "dev": "node build.mjs && node server/index.js",
+    "test": "node test/crypto.test.mjs && node test/telegramAuth.test.mjs && node build.mjs && node test/smoke.test.mjs",
+    "gen-test-initdata": "node scripts/gen-test-initdata.mjs"
+  },
+  "dependencies": {
+    "@noble/ciphers": "^2.2.0",
+    "@noble/curves": "^2.2.0",
+    "@noble/hashes": "^2.2.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "grammy": "^1.44.0",
+    "pg": "^8.12.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "jsdom": "^25.0.0"
+  }
+}
